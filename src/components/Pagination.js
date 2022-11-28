@@ -17,12 +17,11 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
         <nav>
             <ul className='pagination justify-content-center d-flex flex-wrap'>
                 <li className="page-item">
-                    <a className="page-link" 
-                        onClick={prevPage} 
-                        href='#'>
+                    <button className="page-link" 
+                        onClick={prevPage} >
                         
                         Previous
-                    </a>
+                    </button>
                 </li>
                 {pageNumbers.map(pgNumber => (
                     <li key={pgNumber} 
