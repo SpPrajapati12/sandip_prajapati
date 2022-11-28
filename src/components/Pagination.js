@@ -1,26 +1,49 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 
-const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
-  const pageNumbers = [];
+import React from 'react'
 
-  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
-    pageNumbers.push(i);
-  }
+const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
 
-  return (
-    <nav className='d-flex justify-content-center'>
-      <ul className='pagination flex-wrap'>
-        {pageNumbers.map(number => (
-          <li key={number} className='page-item '>
-            <button onClick={() => paginate(number)} className='page-link'>
-              {number}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-};
+    const pageNumbers = [...Array(nPages + 1).keys()].slice(1)
 
-export default Pagination;
+    
+
+    const nextPage = () => {
+            if(currentPage !== nPages) setCurrentPage(currentPage + 1)
+    }
+    const prevPage = () => {
+        if(currentPage !== 1) setCurrentPage(currentPage - 1)
+    }
+    return (
+        <nav>
+            <ul className='pagination justify-content-center d-flex flex-wrap'>
+                <li className="page-item">
+                    <a className="page-link" 
+                        onClick={prevPage} 
+                        href='#'>
+                        
+                        Previous
+                    </a>
+                </li>
+                {pageNumbers.map(pgNumber => (
+                    <li key={pgNumber} 
+                        className= {`page-item ${currentPage == pgNumber ? 'active' : ''} `} >
+
+                        <button onClick={() => setCurrentPage(pgNumber)}  
+                            className='page-link' >
+                            {pgNumber}
+                        </button>
+                    </li>
+                ))}
+                <li className="page-item">
+                    <button className="page-link" 
+                        onClick={nextPage}>
+                        
+                        Next
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    )
+}
+
+export default Pagination

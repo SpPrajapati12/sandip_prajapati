@@ -12,14 +12,14 @@ const UserList = () => {
   const [userList, setUserList] = useState({
     data: []
   })
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
-  console.log(postsPerPage);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [recordsPerPage,setRecordsPerPage] = useState(10);
 
 
   useEffect(() => {
     dispatch(getUsersList())
-  }, [currentPage, postsPerPage])
+  }, [currentPage, recordsPerPage])
 
   useEffect(() => {
     if (users) {
@@ -31,25 +31,24 @@ const UserList = () => {
   }, [users]);
 
 
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
 
-  const indexOfLastPost = currentPage * postsPerPage;
+  const currentRecords = userList.data.slice(indexOfFirstRecord,
+    indexOfLastRecord);
+  const nPages = Math.ceil(userList.data.length / recordsPerPage)
 
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = userList.data && userList.data.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const handleChangeSelect = (e) => {
     const value = e.target.value
-    setPostsPerPage(value)
-
+    setRecordsPerPage(value)
   }
 
   return (
     <div className="container">
       <div className="select">
-        <div class="input-group mb-3 w-25">
-          <select class="custom-select" id="inputGroupSelect01" onChange={handleChangeSelect}>
+        <div className="input-group mb-3 w-25">
+          <select className="custom-select" id="inputGroupSelect01" onChange={handleChangeSelect}>
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="30">30</option>
@@ -57,17 +56,15 @@ const UserList = () => {
         </div>
       </div>
       <div className="row m-2">
-        {currentPosts ? currentPosts.map((items, key) => (
+        {currentRecords ? currentRecords.map((items, key) => (
           <Card key={key} items={items} />
         )) : <h1>NO users Found</h1>}
       </div>
       <Pagination
-        postsPerPage={postsPerPage}
-        totalPosts={userList.data.length}
-        paginate={paginate}
-      />
-
-
+        nPages={nPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage} 
+        />
     </div>
   )
 }
